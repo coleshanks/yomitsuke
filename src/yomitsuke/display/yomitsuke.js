@@ -71,6 +71,21 @@
     });
   }
 
+  // One graph open at a time, opened and closed by the script rather than by hover or focus,
+  // which stick on phones.
+  function closeAll() {
+    for (const open of document.querySelectorAll(".ym-open")) open.classList.remove("ym-open");
+  }
+
+  function toggle(el, pop) {
+    const opening = !el.classList.contains("ym-open");
+    closeAll();
+    if (opening) {
+      el.classList.add("ym-open");
+      keepOnScreen(pop);
+    }
+  }
+
   function element(tag, className, text) {
     const el = document.createElement(tag);
     if (className) el.className = className;
@@ -129,9 +144,12 @@
         const pop = element("span", "ym-pop");
         codes.forEach((code) => pop.appendChild(graph(kana, code)));
         el.appendChild(pop);
-        el.tabIndex = 0; // a tap focuses it on phones, which shows the graph
+        // A tap on the word or its graph opens or closes the graph. AnkiMobile answers or grades
+        // the card on any tap unless the element is "tappable" or has an onclick handler, so
+        // this has both; a tap anywhere else still reaches the card as usual.
+        el.classList.add("tappable");
+        el.onclick = () => toggle(el, pop);
         el.addEventListener("pointerenter", () => keepOnScreen(pop));
-        el.addEventListener("focus", () => keepOnScreen(pop));
       }
     }
     out.appendChild(el);
@@ -161,6 +179,11 @@
   }
 
   addStyle();
+  // Scrolling closes the graph. Once per page, however many cards Anki swaps into it.
+  if (!document.documentElement.hasAttribute("data-ym-scroll")) {
+    document.documentElement.setAttribute("data-ym-scroll", "");
+    document.addEventListener("scroll", closeAll, { capture: true, passive: true });
+  }
   for (const field of document.querySelectorAll(".ym:not([data-ym-done])")) {
     field.dataset.ymDone = "";
     render(field);

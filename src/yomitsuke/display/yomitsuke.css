@@ -43,13 +43,21 @@
   }
 }
 
-/* colored: the word is always in its colour; reading: only while hovered or tapped */
+/* colored: the word is always in its colour; reading: only while its graph is open (a tap or
+   click, see the script) or, with a mouse, hovered. Hover is limited to devices that really
+   have it, since on phones it sticks after a tap. */
 .ym[data-mode="colored"] .ym-word,
-.ym[data-mode="reading"] .ym-word:is(:hover, :focus) {
+.ym[data-mode="reading"] .ym-word.ym-open {
   color: var(--ym-color, inherit);
+}
+@media (hover: hover) {
+  .ym[data-mode="reading"] .ym-word:hover {
+    color: var(--ym-color, inherit);
+  }
 }
 .ym-word:has(.ym-pop) {
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* The pitch graph, below the word */
@@ -73,8 +81,13 @@
   border: 1px solid var(--ym-popup-line);
   border-radius: 0.3em;
 }
-.ym-word:is(:hover, :focus) .ym-pop {
+.ym-word.ym-open .ym-pop {
   display: block;
+}
+@media (hover: hover) {
+  .ym-word:hover .ym-pop {
+    display: block;
+  }
 }
 .ym-row {
   display: block;

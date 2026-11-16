@@ -73,7 +73,7 @@ change any of them in the note type's styling, for example `.card { --ym-heiban:
 
 ### on your phone
 
-the display is part of the note type, so it syncs with your cards. tap a word to see its pitch graph, and scroll to close it
+the display is part of the note type, so it syncs with your cards. tap a word to see its pitch graph, and tap it again or scroll to close it. taps on words with a graph only open the graph, so they never answer the card in AnkiMobile
 
 <img src="docs/phone.jpg" alt="the same card on an iPhone, with the pitch graph for あちこち open" width="300">
 
