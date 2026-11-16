@@ -1,0 +1,108 @@
+/* yomitsuke display. Override any of these in the note type's Styling, for example
+   .card { --ym-heiban: #3366ff; } */
+:root, .card {
+  --ym-heiban: #005ce6;    /* h: flat */
+  --ym-atamadaka: #e60000; /* a: drop after the first mora */
+  --ym-nakadaka: #e68a00;  /* n: drop in the middle */
+  --ym-odaka: #00802b;     /* o: drop after the last mora */
+  --ym-kifuku: #ac00e6;    /* k: verbs and adjectives with a drop */
+  --ym-popup-bg: #fff;
+  --ym-popup-line: #000;
+}
+.nightMode, .night_mode {
+  --ym-popup-bg: #000;
+  --ym-popup-line: #fff;
+}
+
+.ym-heiban { --ym-color: var(--ym-heiban); }
+.ym-atamadaka { --ym-color: var(--ym-atamadaka); }
+.ym-nakadaka { --ym-color: var(--ym-nakadaka); }
+.ym-odaka { --ym-color: var(--ym-odaka); }
+.ym-kifuku { --ym-color: var(--ym-kifuku); }
+
+.ym-word {
+  position: relative;
+  display: inline-block;
+  outline: none;
+}
+/* Centre the reading over the kanji instead of spreading either one out to match the other */
+.ym ruby,
+.ym ruby rt {
+  ruby-align: center;
+}
+.ym ruby rt {
+  font-size: 0.5em;
+}
+/* WebKit (AnkiMobile) stacks the reading on the kanji's full line box, and fonts with tall
+   ascenders like Noto Sans JP leave a wide gap. Chromium (desktop, AnkiDroid) seats the reading
+   on the em box, overlapping the line box by about 0.65em of the reading; this matches it.
+   Only WebKit supports hanging-punctuation, so Chromium skips this. */
+@supports (hanging-punctuation: first) {
+  .ym ruby rt {
+    margin-bottom: -0.65em;
+  }
+}
+
+/* colored: the word is always in its colour; reading: only while hovered or tapped */
+.ym[data-mode="colored"] .ym-word,
+.ym[data-mode="reading"] .ym-word:is(:hover, :focus) {
+  color: var(--ym-color, inherit);
+}
+.ym-word:has(.ym-pop) {
+  cursor: pointer;
+}
+
+/* The pitch graph, below the word */
+.ym-pop {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  padding: 0.3em 0.5em;
+  font-size: 0.7em;
+  /* plain whatever the word is (<b>, <i>, <u>) */
+  font-weight: normal;
+  font-style: normal;
+  text-decoration: none;
+  line-height: 1.6;
+  white-space: nowrap;
+  text-align: left;
+  background: var(--ym-popup-bg);
+  border: 1px solid var(--ym-popup-line);
+  border-radius: 0.3em;
+}
+.ym-word:is(:hover, :focus) .ym-pop {
+  display: block;
+}
+.ym-row {
+  display: block;
+  color: var(--ym-color, inherit);
+}
+.ym-graph {
+  display: inline-block;
+  padding-top: 0.25em;
+}
+/* Inline, so the line over neighbouring high morae joins up without seams */
+.ym-mora {
+  position: relative;
+  border-top: 0.08em solid transparent;
+}
+.ym-high {
+  border-top-color: var(--ym-popup-line);
+}
+.ym-drop::after {
+  content: "";
+  position: absolute;
+  top: -0.08em;
+  right: 0;
+  width: 0.08em;
+  height: 0.35em;
+  background: var(--ym-popup-line);
+}
+.ym-code {
+  margin-left: 0.4em;
+  font-size: 0.45em;
+  vertical-align: top;
+}

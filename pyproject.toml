@@ -1,0 +1,14 @@
+[project]
+name = "yomitsuke"
+version = "1.0.0"
+description = "Anki add-on that writes furigana and pitch accent into Japanese cards in bulk"
+requires-python = ">=3.13"
+license = "MIT"
+
+# The add-on bundles its own copies of these for Anki; here they're for development and tests.
+[dependency-groups]
+dev = ["fugashi>=1.5", "unidic-lite>=1.0.8", "pytest>=8"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]

@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+.venv/
+# Anki writes this into an installed add-on's folder.
+meta.json
+# Packaged builds are made from the source.
+*.ankiaddon
+dist/
+.DS_Store
+build/

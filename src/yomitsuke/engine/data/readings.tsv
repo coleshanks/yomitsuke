@@ -1,0 +1,30 @@
+# Words UniDic reliably reads wrong or in a rarer way, with the reading to use instead.
+# word<TAB>reading<TAB>optional pitch code. Without a code, the pitch is looked up as usual.
+# Checked by hand on 15 November 2026. Only words that read the same in any context belong here;
+# a word whose reading depends on the sentence (何, 開く, 市) is left to the tokenizer.
+私	わたし
+言う	いう
+日本	にほん
+明日	あした
+不気味	ぶきみ
+無気味	ぶきみ
+正義	せいぎ
+一匹	いっぴき
+一発	いっぱつ
+鍛冶	かじ
+素性	すじょう
+下品	げひん
+不細工	ぶさいく
+手札	てふだ
+雪道	ゆきみち
+闇夜	やみよ
+正気	しょうき
+古文書	こもんじょ
+兵法	へいほう
+刺青	いれずみ
+旗色	はたいろ
+悪鬼	あっき
+前世	ぜんせ
+転生	てんせい
+世々	よよ
+木	き
