@@ -97,7 +97,7 @@ your fixes win over everything else and survive updates
 
 ## install
 
-- **ankiweb:** Tools > Add-ons > Get Add-ons, and the code from the add-on's page
+- **[ankiweb](https://ankiweb.net/shared/info/1899043297):** Tools > Add-ons > Get Add-ons, and paste the code `1899043297`
 - **from github:** download `yomitsuke.ankiaddon` from the [latest release](https://github.com/coleshanks/yomitsuke/releases/latest), then Tools > Add-ons > Install from file
 
 then restart anki. yomitsuke needs anki 26.09 or later
