@@ -35,11 +35,21 @@
 }
 /* WebKit (AnkiMobile) stacks the reading on the kanji's full line box, and fonts with tall
    ascenders like Noto Sans JP leave a wide gap. Chromium (desktop, AnkiDroid) seats the reading
-   on the em box, overlapping the line box by about 0.65em of the reading; this matches it.
-   Only WebKit supports hanging-punctuation, so Chromium skips this. */
+   on the em box, overlapping the line box by about 0.65em of the reading; this pulls WebKit's
+   reading down to a comfortable gap. Only WebKit supports hanging-punctuation, so Chromium
+   skips this. */
 @supports (hanging-punctuation: first) {
   .ym ruby rt {
     margin-bottom: -0.65em;
+  }
+}
+/* Chromium seats the reading very close to the kanji: lift it a little. A relative shift moves
+   only the reading, so the line spacing stays the same; much more than this and it can touch
+   the line above. */
+@supports not (hanging-punctuation: first) {
+  .ym ruby rt {
+    position: relative;
+    top: -0.3em;
   }
 }
 
