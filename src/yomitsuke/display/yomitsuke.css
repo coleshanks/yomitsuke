@@ -70,12 +70,14 @@
   -webkit-tap-highlight-color: transparent;
 }
 
-/* The pitch graph, below the word */
+/* The pitch graph, below the word. Fixed to the window and placed by the script, so it never
+   makes the page taller: near the bottom it runs off the edge instead of making the page
+   scroll to fit it. */
 .ym-pop {
   display: none;
-  position: absolute;
-  top: 100%;
-  left: 50%;
+  position: fixed;
+  top: 0;
+  left: 0;
   transform: translateX(-50%);
   z-index: 10;
   padding: 0.3em 0.5em;

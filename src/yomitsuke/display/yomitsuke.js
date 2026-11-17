@@ -57,18 +57,32 @@
     return { type: TYPES[letter] || "", drop, label: code.toUpperCase() };
   }
 
-  // The graph is centred under its word; near the screen's edge, slide it back on.
-  function keepOnScreen(pop) {
+  // The graph is fixed to the window (see the CSS), centred under its word; near the left or
+  // right edge it slides back on. Then it is measured and nudged into place, in case a card
+  // style moves fixed elements.
+  function place(el, pop) {
+    const word = el.getBoundingClientRect();
+    const centre = word.left + word.width / 2;
+    pop.style.top = `${word.bottom}px`;
+    pop.style.left = `${centre}px`;
     pop.style.translate = "";
     requestAnimationFrame(() => {
       const box = pop.getBoundingClientRect();
+      if (!box.width) return;
       const width = document.documentElement.clientWidth;
       const margin = 4;
-      let shift = 0;
-      if (box.left < margin) shift = margin - box.left;
-      else if (box.right > width - margin) shift = width - margin - box.right;
-      if (shift) pop.style.translate = `${shift}px 0`;
+      const left = Math.max(margin, Math.min(centre - box.width / 2, width - margin - box.width));
+      const x = left - box.left;
+      const y = word.bottom - box.top;
+      if (Math.abs(x) > 0.5 || Math.abs(y) > 0.5) pop.style.translate = `${x}px ${y}px`;
     });
+  }
+
+  function placeAll(selector) {
+    for (const el of document.querySelectorAll(selector)) {
+      const pop = el.querySelector(".ym-pop");
+      if (pop) place(el, pop);
+    }
   }
 
   // One graph open at a time, opened and closed by the script rather than by hover or focus,
@@ -82,7 +96,7 @@
     closeAll();
     if (opening) {
       el.classList.add("ym-open");
-      keepOnScreen(pop);
+      place(el, pop);
     }
   }
 
@@ -149,7 +163,7 @@
         // this has both; a tap anywhere else still reaches the card as usual.
         el.classList.add("tappable");
         el.onclick = () => toggle(el, pop);
-        el.addEventListener("pointerenter", () => keepOnScreen(pop));
+        el.addEventListener("pointerenter", () => place(el, pop));
       }
     }
     out.appendChild(el);
@@ -179,10 +193,16 @@
   }
 
   addStyle();
-  // Scrolling closes the graph. Once per page, however many cards Anki swaps into it.
+  // Scrolling closes a tapped graph; a hovered one follows its word. Once per page, however
+  // many cards Anki swaps into it.
   if (!document.documentElement.hasAttribute("data-ym-scroll")) {
     document.documentElement.setAttribute("data-ym-scroll", "");
-    document.addEventListener("scroll", closeAll, { capture: true, passive: true });
+    const onScroll = () => {
+      closeAll();
+      placeAll(".ym-word:hover");
+    };
+    document.addEventListener("scroll", onScroll, { capture: true, passive: true });
+    window.addEventListener("resize", () => placeAll(".ym-word.ym-open, .ym-word:hover"));
   }
   for (const field of document.querySelectorAll(".ym:not([data-ym-done])")) {
     field.dataset.ymDone = "";
